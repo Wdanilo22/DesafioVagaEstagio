@@ -1,5 +1,6 @@
 package com.desafioStag.desafio.model;
 
+import com.desafioStag.desafio.dto.TarefaDto;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -28,6 +29,15 @@ public class Tarefa {
     }
 
     public Tarefa(){}
+
+    public Tarefa(TarefaDto tarefaDto){
+        this.id = tarefaDto.getId();
+        this.titulo = tarefaDto.getTitulo();
+        this.descricao = tarefaDto.getDescricao();
+        this.responsavel = tarefaDto.getResponsavel();
+        this.dataEntrega = tarefaDto.getDataEntrega();
+        this.concluida = tarefaDto.getConcluida();
+    }
 
     public UUID getId() {
         return id;

@@ -1,11 +1,14 @@
 package com.desafioStag.desafio.service;
 
+import com.desafioStag.desafio.dto.TarefaDto;
 import com.desafioStag.desafio.model.Tarefa;
 import com.desafioStag.desafio.repository.TarefaRepository;
+import com.desafioStag.desafio.service.Exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class TarefaService {
@@ -16,13 +19,21 @@ public class TarefaService {
         this.tarefaRepository = tarefaRepository;
     }
 
-    public Tarefa cadastroTarefa(Tarefa tarefa){
-        return tarefaRepository.save(tarefa);
+    public TarefaDto cadastroTarefa(TarefaDto dto){
+        Tarefa entity = new Tarefa(dto);
+        entity = tarefaRepository.save(entity);
+        return new TarefaDto(entity);
     }
 
     public List<Tarefa> listaTarefas(){
         List<Tarefa> tarefas = tarefaRepository.findAll();
         return tarefas;
+    }
+
+    public TarefaDto fndById(UUID id){
+        Tarefa tarefa = tarefaRepository.findById(id).orElseThrow(
+                ()-> new ResourceNotFoundException("Produto não encontrado"));
+        return new TarefaDto(tarefa);
     }
 
     public List<Tarefa> listaTarefasResponsavel(String responsavel){

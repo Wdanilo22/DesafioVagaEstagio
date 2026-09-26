@@ -1,14 +1,19 @@
 package com.desafioStag.desafio.controller;
 
+import com.desafioStag.desafio.dto.TarefaDto;
 import com.desafioStag.desafio.model.Tarefa;
 import com.desafioStag.desafio.service.TarefaService;
+import jakarta.validation.Valid;
 import org.springframework.cglib.core.Local;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/desafio")
 public class TarefaController {
@@ -20,9 +25,11 @@ public class TarefaController {
     }
 
     @PostMapping("/tarefa")
-    public ResponseEntity<Tarefa> cadastroTarefa(@RequestBody Tarefa tarefa){
-        tarefaService.cadastroTarefa(tarefa);
-        return ResponseEntity.ok().body(tarefa);
+    public ResponseEntity<TarefaDto> cadastroTarefa(@Valid @RequestBody TarefaDto dto){
+        dto = tarefaService.cadastroTarefa(dto);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(dto.getId()).toUri();
+        return ResponseEntity.created(uri).body(dto);
     }
 
     @GetMapping("/tarefas")
